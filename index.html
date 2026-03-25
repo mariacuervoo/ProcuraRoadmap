@@ -88,9 +88,10 @@ body::after{
 .page{
   position:relative;
   z-index:1;
-  max-width:1180px;
+  width:min(100%,1860px);
+  max-width:none;
   margin:0 auto;
-  padding:36px 20px 64px;
+  padding:34px clamp(20px,2.2vw,44px) 64px;
 }
 
 .hero{
@@ -430,12 +431,12 @@ th{
 }
 
 td{
-  padding:15px 16px;
+  padding:16px 18px;
   border-bottom:1px solid rgba(15,40,90,.06);
   vertical-align:top;
-  font-size:14px;
+  font-size:15px;
   color:var(--ink-soft);
-  line-height:1.55;
+  line-height:1.62;
 }
 
 tbody tr{transition:background .16s ease}
@@ -490,14 +491,103 @@ tr[data-phase="m5"] td:first-child{border-left-color:var(--rel)}
 
 .tasks{display:flex;flex-direction:column;gap:7px}
 
+/* Card colapsable para las actividades de cada épica */
+details.tasks-collapse{
+  border:1px solid rgba(15,40,90,.10);
+  border-radius:14px;
+  background:rgba(241,246,252,.65);
+  overflow:hidden;
+}
+
+details.tasks-collapse summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  font-size:14px;
+  font-weight:900;
+  color:var(--ink);
+}
+
+details.tasks-collapse summary::-webkit-details-marker{display:none;}
+
+.tasks-collapse-count{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:40px;
+  padding:4px 11px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid rgba(90,113,144,.22);
+  color:var(--muted);
+  font-size:12.5px;
+  font-weight:900;
+  letter-spacing:.01em;
+}
+
+.tasks-collapse-caret{
+  width:9px;
+  height:9px;
+  border-right:2px solid rgba(26,74,124,.70);
+  border-bottom:2px solid rgba(26,74,124,.70);
+  transform:rotate(45deg);
+  transition:transform .18s ease;
+  flex-shrink:0;
+}
+
+details.tasks-collapse[open] .tasks-collapse-caret{
+  transform:rotate(-135deg);
+}
+
+/* Deja la lista alineada visualmente dentro del card */
+details.tasks-collapse .tasks{
+  padding:12px 14px 14px;
+  gap:10px;
+}
+
+details.tasks-collapse[data-phase="m0"] .tasks-collapse-count{
+  background:var(--req-soft);
+  color:var(--req);
+  border-color:rgba(53,96,150,.22);
+}
+details.tasks-collapse[data-phase="m1"] .tasks-collapse-count{
+  background:var(--bas-soft);
+  color:var(--bas);
+  border-color:rgba(45,85,128,.22);
+}
+details.tasks-collapse[data-phase="m2"] .tasks-collapse-count{
+  background:var(--sol-soft);
+  color:var(--sol);
+  border-color:rgba(37,74,115,.22);
+}
+details.tasks-collapse[data-phase="m3"] .tasks-collapse-count{
+  background:var(--rec-soft);
+  color:var(--rec);
+  border-color:rgba(31,66,104,.22);
+}
+details.tasks-collapse[data-phase="m4"] .tasks-collapse-count{
+  background:var(--apr-soft);
+  color:var(--apr);
+  border-color:rgba(26,58,92,.22);
+}
+details.tasks-collapse[data-phase="m5"] .tasks-collapse-count{
+  background:var(--rel-soft);
+  color:var(--rel);
+  border-color:rgba(15,47,77,.26);
+}
+
 .task{
-  font-size:13px;
+  font-size:14.5px;
   color:var(--ink-soft);
   display:flex;
   align-items:flex-start;
-  gap:10px;
-  line-height:1.5;
-  padding:4px 0 4px 2px;
+  gap:11px;
+  line-height:1.65;
+  padding:6px 0 6px 2px;
 }
 
 .task::before{
@@ -741,9 +831,9 @@ tr[data-phase="m5"] .milestone{
     <ol class="phase-timeline" aria-label="Fases del roadmap en orden">
       <li class="pt-req">Requerimientos<span class="pt-short">Mar–Abr</span></li>
       <li class="pt-bas">Login y Resumen<span class="pt-short">Abr</span></li>
-      <li class="pt-sol">Solicitudes<span class="pt-short">May</span></li>
-      <li class="pt-rec">Recepciones<span class="pt-short">May–Jun</span></li>
-      <li class="pt-apr">Aprobaciones<span class="pt-short">Jun–Jul</span></li>
+      <li class="pt-sol">Solicitudes<span class="pt-short">Abr-May</span></li>
+      <li class="pt-rec">Aprobaciones<span class="pt-short">May–Jun</span></li>
+      <li class="pt-apr">Recepciones<span class="pt-short">Jun–Jul</span></li>
       <li class="pt-rel">Release<span class="pt-short">Jul</span></li>
     </ol>
   </div>
@@ -776,22 +866,38 @@ tr[data-phase="m5"] .milestone{
 
       <tr data-phase="m0">
         <td><span class="pill m0">Marzo - Abril</span></td>
-        <td style="color:var(--muted)">1 – 31 mar</td>
+        <td style="color:var(--muted)">1 mar – 31 abril</td>
         <td><span class="epica req">Definición de requerimientos</span></td>
         <td>
-          <div class="tasks">
+          <details class="tasks-collapse" data-phase="m0" open>
+            <summary>
+              <span class="tasks-collapse-label">Actividades</span>
+              <span class="tasks-collapse-count">20</span>
+              <span class="tasks-collapse-caret" aria-hidden="true"></span>
+            </summary>
+            <div class="tasks">
             <div class="task">Levantamiento de requerimientos funcionales por módulo (Solicitudes, Recepciones, Aprobaciones)</div>
-            <div class="task">Definición del catálogo de productos: funcionalidad a desarrollar (no existe en EBS) <span class="tag-open">por definir</span></div>
+            <div class="task">Talleres con Usuarios de Procura para ver el proceso de Solicitud, Recepciones y Aprobaciones</div>
+            <div class="task">Validar el Proceso de Solicitud para la Definición del catálogo de productos (no existe en EBS validar como se va a realizar) <span class="tag-open">por definir</span></div>
             <div class="task">Lógica multi-país: Argentina, Colombia, Venezuela</div>
-            <div class="task">Indicador: total solicitudes pendientes de aprobar <span class="tag-open">Interfaz requerida</span></div>
-            <div class="task">Indicador: órdenes de compra por recibir <span class="tag-open">Interfaz requerida</span></div>
+            <div class="task">Indicadores de : total solicitudes pendientes de aprobar y órdenes de compra por recibir <span class="tag-open">Interfaz requerida</span></div>
             <div class="task">Validación del perfil de usuario en EBS <span class="tag-ebs">EBS</span></div>
-            <div class="task">Definición de escala de aprobaciones por país y capa de negocio: aprobadores por grupo según cargo, OC, cierre OC, Determinar el estatus de aprobación de la solicitud de EBS (el flujo de quien ya aprobó y quien falta)</div>
+            <div class="task">Revisión de la escala de Aprobación de EBS, aprobadores según cargo, ver como mostrar el estatus de aprobación, determinar si se hará desde el portal o desde EBS (Portal o EBS)</div>
             <div class="task">Definición de diferencia en factura: importe pedido vs importe recibido</div>
             <div class="task">Wireframes y flujos de pantallas principales</div>
             <div class="task">¿Las recepciones se deben ver por perfil, por país, por proovedor?</div>
-            <div class="task">¿El aprobador suplente se modifica desde el portal o desde EBS?</div>
+            <div class="task">¿El aprobador suplente se modifica desde el portal o desde EBS?</div>  
+            <div class="task">Revisar como va a funcionar el Login (van a tener su propio login, tener el de oracle, habilitar mecanismo homologo que valide el correo de Farmatodo con el usuario de EBS)</div>         
+            <div class="task">Determinar como se van a manejar las variables globales de EBS (org_id) y como se van a llevar al portal</div> 
+            <div class="task">Como se va a manejar el cambio de pais en el portal</div>
+            <div class="task">Determinar como se van a manejar las solicitudes (Sea multicompañia o como EBS que es por compañia)</div>  
+            <div class="task">Determinar como sera la segmentacion de los usuarios por paises, compañias, centro de costos, etc.</div>
+            <div class="task">Definir los datos maestros para proporcionarselos al portal</div>
+            <div class="task">Determinar como se van a consumir los datos maestros del portal</div>   
+            <div class="task">Determinar si se van a hacer vistas normales, materializadas o por proceso</div> 
+            <div class="task">Ver el funcionamiento de reasignar en Aprobaciones y determinar si se hace desde el portal o EBS</div>
           </div>
+          </details>
         </td>
         <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
         <td><span class="milestone">Sign-off requerimientos</span></td>
@@ -802,7 +908,13 @@ tr[data-phase="m5"] .milestone{
         <td style="color:var(--muted)">1 – 30 abr</td>
         <td><span class="epica bas">Login</span></td>
         <td>
-          <div class="tasks">
+          <details class="tasks-collapse" data-phase="m1">
+            <summary>
+              <span class="tasks-collapse-label">Actividades</span>
+              <span class="tasks-collapse-count">6</span>
+              <span class="tasks-collapse-caret" aria-hidden="true"></span>
+            </summary>
+            <div class="tasks">
             <div class="task">Login vía Google (OAuth)</div>
             <div class="task">Selección de país con ícono de bandera (Argentina, Colombia, Venezuela)</div>
             <div class="task">Estructura de navegación: módulos Solicitudes, Recepciones, Aprobaciones</div>
@@ -810,17 +922,24 @@ tr[data-phase="m5"] .milestone{
             <div class="task">Acciones sobre solicitud: Ver detalle, Editar, Cancelar, Copiar, Recepcionar</div>
             <div class="task">Estado "Rechazado" redirige a historial de aprobaciones</div>
           </div>
+          </details>
         </td>
         <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
         <td><span class="milestone">Base + listado solicitudes</span></td>
       </tr>
 
       <tr data-phase="m2">
-        <td><span class="pill m2">Mayo</span></td>
-        <td style="color:var(--muted)">1 – 31 may</td>
+        <td><span class="pill m2">Abril - Mayo</span></td>
+        <td style="color:var(--muted)">1 abril – 31 may</td>
         <td><span class="epica sol">Solicitudes</span></td>
         <td>
-          <div class="tasks">
+          <details class="tasks-collapse" data-phase="m2">
+            <summary>
+              <span class="tasks-collapse-label">Actividades</span>
+              <span class="tasks-collapse-count">9</span>
+              <span class="tasks-collapse-caret" aria-hidden="true"></span>
+            </summary>
+            <div class="tasks">
             <div class="task">Crear solicitud: buscar producto y proveedor (catálogo a desarrollar, no viene de EBS) <span class="tag-open">requiere diseño</span></div>
             <div class="task">Definir cantidad y detalle de ítems</div>
             <div class="task">Centro de costos: Sí/No · Jerarquía: Vicepresidencia → Áreas → Valores</div>
@@ -831,17 +950,48 @@ tr[data-phase="m5"] .milestone{
             <div class="task">Compra por contrato: Anexar, Justificación, Detalle, Centro de costos, Aprobador</div>
             <div class="task">QA y corrección de bugs — módulo Solicitudes</div>
           </div>
+          </details>
         </td>
         <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
         <td><span class="milestone">Demo Solicitudes</span></td>
       </tr>
 
+      <tr data-phase="m4">
+        <td><span class="pill m4">Mayo -Junio</span></td>
+        <td style="color:var(--muted)">1 mayo – 30 jun</td>
+        <td><span class="epica apr">Aprobaciones</span></td>
+        <td>
+          <details class="tasks-collapse" data-phase="m4">
+            <summary>
+              <span class="tasks-collapse-label">Actividades</span>
+              <span class="tasks-collapse-count">5</span>
+              <span class="tasks-collapse-caret" aria-hidden="true"></span>
+            </summary>
+            <div class="tasks">
+            <div class="task">Panel aprobador: Resumen, Control de presupuesto, Escala de aprobaciones, Orden de Compra</div>
+            <div class="task">Aprobador suplente</div>
+            <div class="task">Flujo de aprobación por niveles según capa de negocio por país</div>
+            <div class="task">Rechazar solicitud con comentario → pasa a historial</div>
+            <div class="task">Delegación de aprobación</div>
+          </div>
+          </details>
+        </td>
+        <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
+        <td></td>
+      </tr>
+
       <tr data-phase="m3">
-        <td><span class="pill m3">Mayo</span></td>
-        <td style="color:var(--muted)">1 – 30 jun</td>
+        <td><span class="pill m3">Junio - Julio</span></td>
+        <td style="color:var(--muted)">1 jun - 31 jul</td>
         <td><span class="epica rec">Recepciones</span></td>
         <td>
-          <div class="tasks">
+          <details class="tasks-collapse" data-phase="m3">
+            <summary>
+              <span class="tasks-collapse-label">Actividades</span>
+              <span class="tasks-collapse-count">9</span>
+              <span class="tasks-collapse-caret" aria-hidden="true"></span>
+            </summary>
+            <div class="tasks">
             <div class="task">Listado de recepciones con filtros: Descripción, Fecha, Proveedor</div>
             <div class="task">Acciones: Editar, Ver detalle, Corregir, Recepcionar</div>
             <div class="task">Tabla detalle: Nombre solicitante, Tipo conexión, Importe, Cantidad</div>
@@ -852,34 +1002,24 @@ tr[data-phase="m5"] .milestone{
             <div class="task">Corrección de recibos</div>
             <div class="task">QA y corrección de bugs — módulo Recepciones</div>
           </div>
+          </details>
         </td>
         <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
         <td><span class="milestone">Demo Recepciones</span></td>
       </tr>
 
-      <tr data-phase="m4">
-        <td><span class="pill m4">Junio</span></td>
-        <td style="color:var(--muted)">1 – 15 jul</td>
-        <td><span class="epica apr">Aprobaciones</span></td>
-        <td>
-          <div class="tasks">
-            <div class="task">Panel aprobador: Resumen, Control de presupuesto, Escala de aprobaciones, Orden de Compra</div>
-            <div class="task">Aprobador suplente</div>
-            <div class="task">Flujo de aprobación por niveles según capa de negocio por país</div>
-            <div class="task">Rechazar solicitud con comentario → pasa a historial</div>
-            <div class="task">Delegación de aprobación</div>
-          </div>
-        </td>
-        <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
-        <td></td>
-      </tr>
-
       <tr data-phase="m5">
         <td><span class="pill m5">Julio</span></td>
-        <td style="color:var(--muted)">16 – 31 jul</td>
+        <td style="color:var(--muted)">01 – 31 jul</td>
         <td><span class="epica rel">Release MVP</span></td>
         <td>
-          <div class="tasks">
+          <details class="tasks-collapse" data-phase="m5">
+            <summary>
+              <span class="tasks-collapse-label">Actividades</span>
+              <span class="tasks-collapse-count">6</span>
+              <span class="tasks-collapse-caret" aria-hidden="true"></span>
+            </summary>
+            <div class="tasks">
             <div class="task">Integración end-to-end: Solicitud → Recepción → Aprobación</div>
             <div class="task">Pruebas de regresión multi-país: Argentina, Colombia, Venezuela</div>
             <div class="task">Ajustes finales de UX/UI</div>
@@ -887,6 +1027,7 @@ tr[data-phase="m5"] .milestone{
             <div class="task">Documentación técnica y de usuario</div>
             <div class="task">Despliegue en ambiente productivo</div>
           </div>
+          </details>
         </td>
         <td><span class="status pending"><span class="sdot pending"></span>Pendiente</span></td>
         <td><span class="milestone">Release v1.0 MVP</span></td>
@@ -975,6 +1116,15 @@ tr[data-phase="m5"] .milestone{
   </div>
 
   <p class="page-footer">Roadmap Portal de Procura · Farmatodo · documento de planificación</p>
+
+  <script>
+    // En impresión, expandimos todas las épicas para que el contenido no se "pierda".
+    window.addEventListener('beforeprint', () => {
+      document.querySelectorAll('details.tasks-collapse').forEach((d) => {
+        d.open = true;
+      });
+    });
+  </script>
 
 </div>
 </body>
